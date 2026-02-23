@@ -265,6 +265,16 @@
               "type": "key-value-block"
             }
           }
+        },
+        {
+          "title": "Product Teaser",
+          "id": "product-teaser",
+          "model": "product-teaser",
+          "plugins": {
+            "da": {
+              "type": "key-value-block"
+            }
+          }
         }
       ]
     }
