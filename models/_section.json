@@ -24,6 +24,18 @@
             {
               "name": "Highlight",
               "value": "highlight"
+            },
+            {
+              "name": "Light",
+              "value": "light"
+            },
+            {
+              "name": "Glass",
+              "value": "glass"
+            },
+            {
+              "name": "Dark glass",
+              "value": "dark-glass"
             }
           ]
         },

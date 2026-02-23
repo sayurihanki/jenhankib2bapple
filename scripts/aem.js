@@ -672,6 +672,7 @@ async function loadSection(section, loadCallback) {
     if (loadCallback) await loadCallback(section);
     section.dataset.sectionStatus = 'loaded';
     section.style.display = null;
+    section.classList.add('appear');
   }
 }
 
