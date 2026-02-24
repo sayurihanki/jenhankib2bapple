@@ -183,6 +183,25 @@ export default async function decorate(block) {
   }
 
   const navSections = nav.querySelector('.nav-sections');
+  let navOpenTimeout;
+  const NAV_OPEN_DELAY_MS = 75;
+  const cancelOpenNavSection = () => {
+    if (navOpenTimeout) {
+      window.clearTimeout(navOpenTimeout);
+      navOpenTimeout = null;
+    }
+  };
+  const scheduleOpenNavSection = (section) => {
+    cancelOpenNavSection();
+    if (!navSections) return;
+    navOpenTimeout = window.setTimeout(() => {
+      toggleAllNavSections(navSections);
+      section.setAttribute('aria-expanded', 'true');
+      overlay.classList.add('show');
+      navOpenTimeout = null;
+    }, NAV_OPEN_DELAY_MS);
+  };
+
   if (navSections) {
     const navList = navSections.querySelector('.default-content-wrapper > ul');
     if (navList) {
@@ -214,14 +233,14 @@ export default async function decorate(block) {
           }
         });
         navSection.addEventListener('mouseenter', () => {
-          toggleAllNavSections(navSections);
           if (isDesktop.matches) {
             if (!navSection.classList.contains('nav-drop')) {
+              cancelOpenNavSection();
+              toggleAllNavSections(navSections);
               overlay.classList.remove('show');
               return;
             }
-            navSection.setAttribute('aria-expanded', 'true');
-            overlay.classList.add('show');
+            scheduleOpenNavSection(navSection);
           }
         });
       });
@@ -513,7 +532,7 @@ export default async function decorate(block) {
   block.append(navWrapper);
 
   let navCloseTimeout;
-  const NAV_CLOSE_DELAY_MS = 60;
+  const NAV_CLOSE_DELAY_MS = 95;
   function scheduleCloseNavSections() {
     navCloseTimeout = window.setTimeout(() => {
       toggleAllNavSections(navSections, false);
@@ -530,15 +549,13 @@ export default async function decorate(block) {
   navWrapper.addEventListener('mouseout', (e) => {
     if (!isDesktop.matches) return;
     const related = e.relatedTarget;
-    if (related && (nav.contains(related) || overlay.contains(related))) return;
+    if (related && nav.contains(related)) return;
+    cancelOpenNavSection();
     scheduleCloseNavSections();
   });
   navWrapper.addEventListener('mouseenter', () => cancelCloseNavSections());
-  overlay.addEventListener('mouseenter', () => cancelCloseNavSections());
-  overlay.addEventListener('mouseout', (e) => {
-    if (!isDesktop.matches) return;
-    const related = e.relatedTarget;
-    if (related && (nav.contains(related) || overlay.contains(related))) return;
+  overlay.addEventListener('mouseenter', () => {
+    cancelOpenNavSection();
     scheduleCloseNavSections();
   });
 

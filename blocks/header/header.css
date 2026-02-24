@@ -4,12 +4,12 @@
   --desktop-large-panel-width: 900px;
   --desktop-panel-min-height: 200px;
   --desktop-panel-max-height: 600px;
-  --nav-hover-radius: 18px;
+  --nav-hover-radius: 20px;
   --nav-dropdown-radius: 24px;
   --nav-interaction-speed: 0.09s;
   --nav-overlay-blur: 5px;
   --nav-highlight-bg: linear-gradient(180deg, rgb(136 33 244 / 18%) 0%, rgb(136 33 244 / 10%) 100%);
-  --nav-highlight-shadow: 0 8px 20px rgb(136 33 244 / 20%);
+  --nav-highlight-shadow: 0 10px 24px rgb(136 33 244 / 22%);
 }
 
 /* header and nav layout */
@@ -237,7 +237,7 @@ header nav .nav-sections ul > li:empty {
   header nav .nav-sections .default-content-wrapper > ul > li,
   header nav .nav-sections .nav-drop {
     border-radius: var(--nav-hover-radius);
-    padding: 6px var(--spacing-medium);
+    padding: 8px var(--spacing-medium);
     transition:
       background-color var(--nav-interaction-speed) ease-out,
       color var(--nav-interaction-speed) ease-out,
@@ -338,7 +338,7 @@ header nav .nav-sections ul > li:empty {
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li a {
     display: block;
-    padding: var(--spacing-small) var(--spacing-medium);
+    padding: calc(var(--spacing-small) + 2px) calc(var(--spacing-medium) + 2px);
     margin: 0 var(--spacing-xsmall);
     border-radius: var(--nav-hover-radius);
     color: var(--accent-1);
@@ -347,6 +347,28 @@ header nav .nav-sections ul > li:empty {
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li a:hover {
+    background: var(--nav-highlight-bg);
+    color: var(--accent-2);
+    box-shadow: var(--nav-highlight-shadow);
+    transform: translateY(-1px);
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li.authCombineNavElement {
+    padding: calc(var(--spacing-small) + 2px) calc(var(--spacing-medium) + 2px);
+    margin: 0 var(--spacing-xsmall);
+    border-radius: var(--nav-hover-radius);
+    color: var(--accent-1);
+    cursor: pointer;
+    transition: background var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out, transform var(--nav-interaction-speed) ease-out;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li.authCombineNavElement > a {
+    color: inherit;
+    display: block;
+    width: 100%;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li.authCombineNavElement:hover {
     background: var(--nav-highlight-bg);
     color: var(--accent-2);
     box-shadow: var(--nav-highlight-shadow);
@@ -627,7 +649,7 @@ header .nav-search-input .search_autocomplete .popover-container {
 }
 
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li > a {
-  padding: var(--spacing-small) var(--spacing-medium);
+  padding: calc(var(--spacing-small) + 2px) calc(var(--spacing-medium) + 2px);
   display: block;
   width: 100%;
   text-decoration: none;
@@ -656,7 +678,7 @@ header .nav-search-input .search_autocomplete .popover-container {
   cursor: pointer;
   background-color: transparent !important;
   color: var(--accent-1) !important;
-  padding: var(--spacing-small) var(--spacing-medium) !important;
+  padding: calc(var(--spacing-small) + 2px) calc(var(--spacing-medium) + 2px) !important;
   display: block !important;
   width: 100% !important;
   text-decoration: none !important;
