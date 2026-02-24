@@ -184,6 +184,24 @@ export default async function decorate(block) {
 
   const navSections = nav.querySelector('.nav-sections');
   if (navSections) {
+    const navList = navSections.querySelector('.default-content-wrapper > ul');
+    if (navList) {
+      const hasAccount = [...navList.querySelectorAll(':scope > li')].some(
+        (li) => li.textContent.trim().toLowerCase().includes('account'),
+      );
+      if (!hasAccount) {
+        const accountLi = document.createElement('li');
+        accountLi.innerHTML = `
+          <p>Account</p>
+          <ul>
+            <li><a href="${rootLink('/customer/login')}" title="Log in">Log in</a></li>
+            <li><a href="${rootLink('/customer/create')}" title="Registration">Registration</a></li>
+            <li><a href="${rootLink('/customer/account')}" title="My Account">My Account</a></li>
+            <li class="authCombineNavElement"><a href="#">Combined Auth</a></li>
+          </ul>`;
+        navList.insertBefore(accountLi, navList.children[1] ?? null);
+      }
+    }
     navSections
       .querySelectorAll(':scope .default-content-wrapper > ul > li')
       .forEach((navSection) => {
