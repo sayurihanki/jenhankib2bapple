@@ -23,16 +23,17 @@ main > .section.appear > div > .hero-3-wrapper {
   animation: none;
 }
 
-/* ── Section shell ── */
+/* ── Section shell (same roundedness as dropdowns) ── */
 .hero-3 {
   position: relative;
   min-height: clamp(580px, 92vh, 960px);
   display: flex;
   align-items: stretch;
   overflow: hidden;
+  border-radius: var(--shape-border-radius-3);
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur) var(--glass-saturate);
-  border-bottom: 1px solid var(--glass-border);
+  border: 1px solid var(--glass-border);
 }
 
 /* Top shimmer line */

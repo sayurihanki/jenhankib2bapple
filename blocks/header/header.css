@@ -260,7 +260,12 @@ header nav .nav-sections ul > li:empty {
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper {
-    background-color: var(--color-neutral-50);
+    background: var(--glass-bg-strong);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--shape-border-radius-3);
+    box-shadow: var(--shadow-glass);
     box-sizing: border-box;
     left: 0;
     max-height: var(--desktop-panel-max-height);
@@ -269,6 +274,7 @@ header nav .nav-sections ul > li:empty {
     position: absolute;
     top: var(--spacing-large);
     width: 100%;
+    overflow: hidden;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li .submenu-header {
@@ -297,7 +303,7 @@ header nav .nav-sections ul > li:empty {
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 8px solid var(--color-neutral-500);
+    border-bottom: 8px solid var(--glass-border);
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li ul > li {
@@ -311,17 +317,22 @@ header nav .nav-sections ul > li:empty {
   }
 }
 
-/* tools */
+/* tools — glassmorphic dropdown panel (cart, account, search) */
 header nav .nav-tools-panel {
   z-index: 100;
   position: absolute;
-  box-shadow: var(--shape-shadow-2);
-  background: var(--background-color);
+  box-shadow: var(--shadow-glass);
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--shape-border-radius-3);
   top: var(--nav-height);
   right: 0;
   width: 100%;
   display: none;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 header nav .nav-tools-panel--show {
@@ -427,7 +438,10 @@ header .nav-search-panel .search-bar-result .product-discovery-product-list__foo
   width: 100%;
 }
 
-/* Mini Cart  */
+/* Mini Cart — same glassmorphic rounded container */
+.cart-mini-cart {
+  border-radius: inherit;
+}
 
 .cart-mini-cart:not(:has(.cart-empty-cart)) {
   max-height: 760px;
@@ -456,6 +470,8 @@ header .nav-search-input .search_autocomplete .popover-container {
 
   header nav .minicart-panel {
     width: 398px;
+    border-radius: var(--shape-border-radius-3);
+    overflow: hidden;
   }
 
   header nav .nav-search-panel {
@@ -516,6 +532,13 @@ header .nav-search-input .search_autocomplete .popover-container {
   font: var(--type-body-1-default-font) !important;
   letter-spacing: var(--type-body-1-default-letter-spacing) !important;
   width: 100%;
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--shape-border-radius-3);
+  box-shadow: var(--shadow-glass);
+  overflow: hidden;
 }
 
 @media (min-width: 1024px) {
@@ -699,7 +722,10 @@ li
   }
 
   header nav .nav-sections ul > li.nav-drop.active .submenu-wrapper {
-    background: var(--background-color);
+    background: var(--glass-bg-strong);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-radius: var(--shape-border-radius-3);
     display: block;
     height: 100%;
     left: 0;
