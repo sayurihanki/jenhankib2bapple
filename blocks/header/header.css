@@ -6,10 +6,12 @@
   --desktop-panel-max-height: 600px;
   --nav-hover-radius: 20px;
   --nav-dropdown-radius: 24px;
-  --nav-interaction-speed: 0.09s;
+  --nav-interaction-speed: 0.22s;
   --nav-overlay-blur: 5px;
-  --nav-highlight-bg: linear-gradient(180deg, rgb(136 33 244 / 18%) 0%, rgb(136 33 244 / 10%) 100%);
-  --nav-highlight-shadow: 0 10px 24px rgb(136 33 244 / 22%);
+  --nav-highlight-bg: rgb(136 33 244 / 5%);
+  --nav-highlight-border: rgb(136 33 244 / 12%);
+  --nav-highlight-bg-selected: rgb(255 255 255 / 80%);
+  --nav-highlight-shadow: 0 0 0 1px rgb(255 255 255 / 50%) inset, 0 2px 8px rgb(136 33 244 / 8%);
 }
 
 /* header and nav layout */
@@ -236,13 +238,14 @@ header nav .nav-sections ul > li:empty {
 
   header nav .nav-sections .default-content-wrapper > ul > li,
   header nav .nav-sections .nav-drop {
+    border: 1px solid transparent;
     border-radius: var(--nav-hover-radius);
     padding: 8px var(--spacing-medium);
     transition:
-      background-color var(--nav-interaction-speed) ease-out,
+      background var(--nav-interaction-speed) ease-out,
+      border-color var(--nav-interaction-speed) ease-out,
       color var(--nav-interaction-speed) ease-out,
-      box-shadow var(--nav-interaction-speed) ease-out,
-      transform var(--nav-interaction-speed) ease-out;
+      box-shadow var(--nav-interaction-speed) ease-out;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li a {
@@ -288,13 +291,13 @@ header nav .nav-sections ul > li:empty {
     border-radius: var(--nav-dropdown-radius);
     box-shadow: var(--shadow-glass);
     overflow: hidden;
-    animation: nav-dropdown-open 0.13s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: nav-dropdown-open 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   @keyframes nav-dropdown-open {
     from {
       opacity: 0;
-      transform: translateY(-10px);
+      transform: translateY(-6px);
     }
     to {
       opacity: 1;
@@ -340,26 +343,28 @@ header nav .nav-sections ul > li:empty {
     display: block;
     padding: calc(var(--spacing-small) + 2px) calc(var(--spacing-medium) + 2px);
     margin: 0 var(--spacing-xsmall);
+    border: 1px solid transparent;
     border-radius: var(--nav-hover-radius);
     color: var(--accent-1);
     text-decoration: none;
-    transition: background var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out, transform var(--nav-interaction-speed) ease-out;
+    transition: background var(--nav-interaction-speed) ease-out, border-color var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li a:hover {
     background: var(--nav-highlight-bg);
     color: var(--accent-2);
+    border-color: var(--nav-highlight-border);
     box-shadow: var(--nav-highlight-shadow);
-    transform: translateY(-1px);
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li.authCombineNavElement {
     padding: calc(var(--spacing-small) + 2px) calc(var(--spacing-medium) + 2px);
     margin: 0 var(--spacing-xsmall);
+    border: 1px solid transparent;
     border-radius: var(--nav-hover-radius);
     color: var(--accent-1);
     cursor: pointer;
-    transition: background var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out, transform var(--nav-interaction-speed) ease-out;
+    transition: background var(--nav-interaction-speed) ease-out, border-color var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li.authCombineNavElement > a {
@@ -371,8 +376,8 @@ header nav .nav-sections ul > li:empty {
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li.authCombineNavElement:hover {
     background: var(--nav-highlight-bg);
     color: var(--accent-2);
+    border-color: var(--nav-highlight-border);
     box-shadow: var(--nav-highlight-shadow);
-    transform: translateY(-1px);
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li a:focus-visible {
@@ -406,9 +411,9 @@ header nav .nav-sections ul > li:empty {
 
   header nav .nav-sections .default-content-wrapper > ul > li:hover,
   header nav .nav-sections .nav-drop[aria-expanded='true'] {
-    background: var(--nav-highlight-bg);
-    box-shadow: 0 4px 14px rgb(136 33 244 / 18%);
-    transform: translateY(-1px);
+    background: var(--nav-highlight-bg-selected);
+    border-color: var(--nav-highlight-border);
+    box-shadow: var(--nav-highlight-shadow);
   }
 }
 
@@ -654,8 +659,9 @@ header .nav-search-input .search_autocomplete .popover-container {
   width: 100%;
   text-decoration: none;
   color: var(--accent-1);
+  border: 1px solid transparent;
   border-radius: var(--nav-hover-radius);
-  transition: background var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out, transform var(--nav-interaction-speed) ease-out;
+  transition: background var(--nav-interaction-speed) ease-out, border-color var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out;
 }
 
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li > a:hover,
@@ -664,8 +670,8 @@ header .nav-search-input .search_autocomplete .popover-container {
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li > .logoutButton:focus-visible {
   background: var(--nav-highlight-bg);
   color: var(--accent-2);
+  border-color: var(--nav-highlight-border);
   box-shadow: var(--nav-highlight-shadow);
-  transform: translateY(-1px);
 }
 
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li > a:focus-visible,
@@ -687,16 +693,16 @@ header .nav-search-input .search_autocomplete .popover-container {
   margin: 0 !important;
   text-align: start !important;
   box-sizing: border-box !important;
-  border: none !important;
+  border: 1px solid transparent !important;
   border-radius: var(--nav-hover-radius) !important;
-  transition: background var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out, transform var(--nav-interaction-speed) ease-out !important;
+  transition: background var(--nav-interaction-speed) ease-out, border-color var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out !important;
 }
 
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li button:hover {
   background: var(--nav-highlight-bg) !important;
   color: var(--accent-2) !important;
+  border-color: var(--nav-highlight-border) !important;
   box-shadow: var(--nav-highlight-shadow) !important;
-  transform: translateY(-1px);
 }
 
 .grecaptcha-badge {
@@ -705,7 +711,7 @@ header .nav-search-input .search_autocomplete .popover-container {
 }
 
 .overlay {
-  background-color: rgb(27 16 40 / 32%) !important;
+  background-color: rgb(27 16 40 / 22%) !important;
   display: none;
   inset: 0;
   position: fixed;

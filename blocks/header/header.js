@@ -184,7 +184,7 @@ export default async function decorate(block) {
 
   const navSections = nav.querySelector('.nav-sections');
   let navOpenTimeout;
-  const NAV_OPEN_DELAY_MS = 75;
+  const NAV_OPEN_DELAY_MS = 80;
   const cancelOpenNavSection = () => {
     if (navOpenTimeout) {
       window.clearTimeout(navOpenTimeout);
@@ -532,7 +532,7 @@ export default async function decorate(block) {
   block.append(navWrapper);
 
   let navCloseTimeout;
-  const NAV_CLOSE_DELAY_MS = 95;
+  const NAV_CLOSE_DELAY_MS = 85;
   function scheduleCloseNavSections() {
     navCloseTimeout = window.setTimeout(() => {
       toggleAllNavSections(navSections, false);
