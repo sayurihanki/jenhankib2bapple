@@ -521,6 +521,14 @@ header .nav-search-input .search_autocomplete .popover-container {
     top: calc(-12px + var(--nav-height));
   }
 
+  /* Account dropdown: position directly under the Account button */
+  .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel.nav-tools-panel {
+    top: calc(100% + 6px);
+    right: 0;
+    left: auto;
+    width: 398px;
+  }
+
   header nav .minicart-panel {
     width: 398px;
     border-radius: var(--shape-border-radius-3);
