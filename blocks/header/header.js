@@ -512,11 +512,33 @@ export default async function decorate(block) {
   navWrapper.append(nav);
   block.append(navWrapper);
 
-  navWrapper.addEventListener('mouseout', (e) => {
-    if (isDesktop.matches && !nav.contains(e.relatedTarget)) {
-      toggleAllNavSections(navSections);
+  let navCloseTimeout;
+  function scheduleCloseNavSections() {
+    navCloseTimeout = window.setTimeout(() => {
+      toggleAllNavSections(navSections, false);
       overlay.classList.remove('show');
+      navCloseTimeout = null;
+    }, 200);
+  }
+  function cancelCloseNavSections() {
+    if (navCloseTimeout) {
+      window.clearTimeout(navCloseTimeout);
+      navCloseTimeout = null;
     }
+  }
+  navWrapper.addEventListener('mouseout', (e) => {
+    if (!isDesktop.matches) return;
+    const related = e.relatedTarget;
+    if (related && (nav.contains(related) || overlay.contains(related))) return;
+    scheduleCloseNavSections();
+  });
+  navWrapper.addEventListener('mouseenter', () => cancelCloseNavSections());
+  overlay.addEventListener('mouseenter', () => cancelCloseNavSections());
+  overlay.addEventListener('mouseout', (e) => {
+    if (!isDesktop.matches) return;
+    const related = e.relatedTarget;
+    if (related && (nav.contains(related) || overlay.contains(related))) return;
+    scheduleCloseNavSections();
   });
 
   window.addEventListener('resize', () => {

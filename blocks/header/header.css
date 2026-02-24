@@ -268,8 +268,26 @@ header nav .nav-sections ul > li:empty {
     min-height: var(--desktop-panel-min-height);
     padding: var(--spacing-xbig);
     position: absolute;
-    top: var(--spacing-large);
+    top: var(--spacing-medium);
     width: 100%;
+    animation: nav-dropdown-open 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes nav-dropdown-open {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper {
+      animation: none;
+    }
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li .submenu-header {
