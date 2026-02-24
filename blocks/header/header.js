@@ -513,12 +513,13 @@ export default async function decorate(block) {
   block.append(navWrapper);
 
   let navCloseTimeout;
+  const NAV_CLOSE_DELAY_MS = 90;
   function scheduleCloseNavSections() {
     navCloseTimeout = window.setTimeout(() => {
       toggleAllNavSections(navSections, false);
       overlay.classList.remove('show');
       navCloseTimeout = null;
-    }, 200);
+    }, NAV_CLOSE_DELAY_MS);
   }
   function cancelCloseNavSections() {
     if (navCloseTimeout) {
