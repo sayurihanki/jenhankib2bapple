@@ -240,12 +240,10 @@ header nav .nav-sections ul > li:empty {
   header nav .nav-sections .nav-drop {
     border: 1px solid transparent;
     border-radius: var(--nav-hover-radius);
-    padding: 8px var(--spacing-medium);
+    padding: 2px var(--spacing-small);
     transition:
-      background var(--nav-interaction-speed) ease-out,
-      border-color var(--nav-interaction-speed) ease-out,
       color var(--nav-interaction-speed) ease-out,
-      box-shadow var(--nav-interaction-speed) ease-out;
+      transform var(--nav-interaction-speed) ease-out;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li a {
@@ -272,6 +270,43 @@ header nav .nav-sections ul > li:empty {
   header nav .nav-sections .default-content-wrapper > ul > li {
     flex: 0 1 auto;
     position: relative;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li > p,
+  header nav .nav-sections .default-content-wrapper > ul > li > a {
+    transition:
+      color var(--nav-interaction-speed) ease-out,
+      transform var(--nav-interaction-speed) ease-out;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li::after {
+    content: '';
+    position: absolute;
+    left: var(--spacing-small);
+    right: var(--spacing-small);
+    bottom: -2px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, rgb(136 33 244 / 45%) 0%, rgb(109 40 217 / 65%) 100%);
+    opacity: 0;
+    transform: scaleX(0.35);
+    transform-origin: center;
+    transition: transform var(--nav-interaction-speed) ease-out, opacity var(--nav-interaction-speed) ease-out;
+    pointer-events: none;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li:hover::after,
+  header nav .nav-sections .nav-drop[aria-expanded='true']::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li:hover > p,
+  header nav .nav-sections .default-content-wrapper > ul > li:hover > a,
+  header nav .nav-sections .nav-drop[aria-expanded='true'] > p,
+  header nav .nav-sections .nav-drop[aria-expanded='true'] > a {
+    color: var(--accent-2);
+    transform: translateY(-1px);
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper {
@@ -341,8 +376,8 @@ header nav .nav-sections ul > li:empty {
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li a {
     display: block;
-    padding: calc(var(--spacing-small) + 2px) calc(var(--spacing-medium) + 2px);
-    margin: 0 var(--spacing-xsmall);
+    padding: var(--spacing-xsmall) var(--spacing-small);
+    margin: 0 var(--spacing-xxsmall);
     border: 1px solid transparent;
     border-radius: var(--nav-hover-radius);
     color: var(--accent-1);
@@ -351,29 +386,6 @@ header nav .nav-sections ul > li:empty {
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li a:hover {
-    background: var(--nav-highlight-bg);
-    color: var(--accent-2);
-    border-color: var(--nav-highlight-border);
-    box-shadow: var(--nav-highlight-shadow);
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li.authCombineNavElement {
-    padding: calc(var(--spacing-small) + 2px) calc(var(--spacing-medium) + 2px);
-    margin: 0 var(--spacing-xsmall);
-    border: 1px solid transparent;
-    border-radius: var(--nav-hover-radius);
-    color: var(--accent-1);
-    cursor: pointer;
-    transition: background var(--nav-interaction-speed) ease-out, border-color var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out;
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li.authCombineNavElement > a {
-    color: inherit;
-    display: block;
-    width: 100%;
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li.authCombineNavElement:hover {
     background: var(--nav-highlight-bg);
     color: var(--accent-2);
     border-color: var(--nav-highlight-border);
@@ -411,9 +423,9 @@ header nav .nav-sections ul > li:empty {
 
   header nav .nav-sections .default-content-wrapper > ul > li:hover,
   header nav .nav-sections .nav-drop[aria-expanded='true'] {
-    background: var(--nav-highlight-bg-selected);
-    border-color: var(--nav-highlight-border);
-    box-shadow: var(--nav-highlight-shadow);
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
   }
 }
 
@@ -654,7 +666,7 @@ header .nav-search-input .search_autocomplete .popover-container {
 }
 
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li > a {
-  padding: calc(var(--spacing-small) + 2px) calc(var(--spacing-medium) + 2px);
+  padding: var(--spacing-xsmall) var(--spacing-small);
   display: block;
   width: 100%;
   text-decoration: none;
@@ -684,7 +696,7 @@ header .nav-search-input .search_autocomplete .popover-container {
   cursor: pointer;
   background-color: transparent !important;
   color: var(--accent-1) !important;
-  padding: calc(var(--spacing-small) + 2px) calc(var(--spacing-medium) + 2px) !important;
+  padding: var(--spacing-xsmall) var(--spacing-small) !important;
   display: block !important;
   width: 100% !important;
   text-decoration: none !important;
