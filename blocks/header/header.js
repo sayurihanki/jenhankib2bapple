@@ -513,7 +513,7 @@ export default async function decorate(block) {
   block.append(navWrapper);
 
   let navCloseTimeout;
-  const NAV_CLOSE_DELAY_MS = 90;
+  const NAV_CLOSE_DELAY_MS = 60;
   function scheduleCloseNavSections() {
     navCloseTimeout = window.setTimeout(() => {
       toggleAllNavSections(navSections, false);

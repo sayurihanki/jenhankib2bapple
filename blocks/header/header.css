@@ -4,10 +4,12 @@
   --desktop-large-panel-width: 900px;
   --desktop-panel-min-height: 200px;
   --desktop-panel-max-height: 600px;
-  --nav-hover-radius: 14px;
+  --nav-hover-radius: 18px;
   --nav-dropdown-radius: 24px;
-  --nav-interaction-speed: 0.12s;
+  --nav-interaction-speed: 0.09s;
   --nav-overlay-blur: 5px;
+  --nav-highlight-bg: linear-gradient(180deg, rgb(136 33 244 / 18%) 0%, rgb(136 33 244 / 10%) 100%);
+  --nav-highlight-shadow: 0 8px 20px rgb(136 33 244 / 20%);
 }
 
 /* header and nav layout */
@@ -235,10 +237,12 @@ header nav .nav-sections ul > li:empty {
   header nav .nav-sections .default-content-wrapper > ul > li,
   header nav .nav-sections .nav-drop {
     border-radius: var(--nav-hover-radius);
-    padding: 0 var(--spacing-small);
+    padding: 6px var(--spacing-medium);
     transition:
       background-color var(--nav-interaction-speed) ease-out,
-      color var(--nav-interaction-speed) ease-out;
+      color var(--nav-interaction-speed) ease-out,
+      box-shadow var(--nav-interaction-speed) ease-out,
+      transform var(--nav-interaction-speed) ease-out;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li a {
@@ -284,7 +288,7 @@ header nav .nav-sections ul > li:empty {
     border-radius: var(--nav-dropdown-radius);
     box-shadow: var(--shadow-glass);
     overflow: hidden;
-    animation: nav-dropdown-open 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: nav-dropdown-open 0.13s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   @keyframes nav-dropdown-open {
@@ -334,17 +338,19 @@ header nav .nav-sections ul > li:empty {
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li a {
     display: block;
-    padding: var(--spacing-xsmall) var(--spacing-small);
+    padding: var(--spacing-small) var(--spacing-medium);
     margin: 0 var(--spacing-xsmall);
     border-radius: var(--nav-hover-radius);
     color: var(--accent-1);
     text-decoration: none;
-    transition: background-color var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out;
+    transition: background var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out, transform var(--nav-interaction-speed) ease-out;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li a:hover {
-    background-color: rgb(136 33 244 / 12%);
+    background: var(--nav-highlight-bg);
     color: var(--accent-2);
+    box-shadow: var(--nav-highlight-shadow);
+    transform: translateY(-1px);
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] .submenu-wrapper ul > li a:focus-visible {
@@ -378,7 +384,9 @@ header nav .nav-sections ul > li:empty {
 
   header nav .nav-sections .default-content-wrapper > ul > li:hover,
   header nav .nav-sections .nav-drop[aria-expanded='true'] {
-    background-color: var(--color-neutral-200);
+    background: var(--nav-highlight-bg);
+    box-shadow: 0 4px 14px rgb(136 33 244 / 18%);
+    transform: translateY(-1px);
   }
 }
 
@@ -619,21 +627,23 @@ header .nav-search-input .search_autocomplete .popover-container {
 }
 
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li > a {
-  padding: var(--spacing-xsmall) var(--spacing-small);
+  padding: var(--spacing-small) var(--spacing-medium);
   display: block;
   width: 100%;
   text-decoration: none;
   color: var(--accent-1);
   border-radius: var(--nav-hover-radius);
-  transition: background-color var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out;
+  transition: background var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out, transform var(--nav-interaction-speed) ease-out;
 }
 
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li > a:hover,
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li > a:focus-visible,
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li > .logoutButton:hover,
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li > .logoutButton:focus-visible {
-  background-color: rgb(136 33 244 / 12%);
+  background: var(--nav-highlight-bg);
   color: var(--accent-2);
+  box-shadow: var(--nav-highlight-shadow);
+  transform: translateY(-1px);
 }
 
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li > a:focus-visible,
@@ -646,7 +656,7 @@ header .nav-search-input .search_autocomplete .popover-container {
   cursor: pointer;
   background-color: transparent !important;
   color: var(--accent-1) !important;
-  padding: var(--spacing-xsmall) var(--spacing-small) !important;
+  padding: var(--spacing-small) var(--spacing-medium) !important;
   display: block !important;
   width: 100% !important;
   text-decoration: none !important;
@@ -657,12 +667,14 @@ header .nav-search-input .search_autocomplete .popover-container {
   box-sizing: border-box !important;
   border: none !important;
   border-radius: var(--nav-hover-radius) !important;
-  transition: background-color var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out !important;
+  transition: background var(--nav-interaction-speed) ease-out, color var(--nav-interaction-speed) ease-out, box-shadow var(--nav-interaction-speed) ease-out, transform var(--nav-interaction-speed) ease-out !important;
 }
 
 .dropdown-wrapper.nav-tools-wrapper .nav-auth-menu-panel .authenticated-user-menu li button:hover {
-  background-color: rgb(136 33 244 / 12%) !important;
+  background: var(--nav-highlight-bg) !important;
   color: var(--accent-2) !important;
+  box-shadow: var(--nav-highlight-shadow) !important;
+  transform: translateY(-1px);
 }
 
 .grecaptcha-badge {
