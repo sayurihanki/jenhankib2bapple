@@ -22,6 +22,11 @@ import { fetchPlaceholders, getProductLink } from '../../scripts/commerce.js';
 import '../../scripts/initializers/search.js';
 import '../../scripts/initializers/wishlist.js';
 
+function getSafeAemAlias(product) {
+  const rawAlias = product?.urlKey || product?.sku || 'product-image';
+  return encodeURIComponent(rawAlias);
+}
+
 export default async function decorate(block) {
   const labels = await fetchPlaceholders();
 
@@ -134,8 +139,13 @@ export default async function decorate(block) {
           const anchorWrapper = document.createElement('a');
           anchorWrapper.href = getProductLink(product.urlKey, product.sku);
 
+          if (!defaultImageProps?.src) {
+            ctx.replaceWith(anchorWrapper);
+            return;
+          }
+
           tryRenderAemAssetsImage(ctx, {
-            alias: product.sku,
+            alias: getSafeAemAlias(product),
             imageProps: defaultImageProps,
             wrapper: anchorWrapper,
             params: {

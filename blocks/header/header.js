@@ -153,6 +153,36 @@ function setupSubmenu(navSection) {
   }
 }
 
+function localizeNavLinks(navSections) {
+  if (!navSections) return;
+
+  navSections.querySelectorAll('a[href]').forEach((anchor) => {
+    const href = anchor.getAttribute('href');
+    const normalizedHref = href?.trim().toLowerCase();
+    const protocol = normalizedHref?.split(':', 1)[0];
+    const isSpecialScheme = protocol === 'mailto'
+      || protocol === 'tel'
+      || protocol === 'javascript';
+
+    if (!href || href.startsWith('#') || isSpecialScheme) {
+      return;
+    }
+
+    try {
+      const url = new URL(href, window.location.origin);
+      if (url.origin !== window.location.origin) return;
+      anchor.href = `${rootLink(url.pathname)}${url.search}${url.hash}`;
+    } catch {
+      // Ignore malformed links from authoring content.
+    }
+  });
+}
+
+function getSafeAemAlias(product) {
+  const rawAlias = product?.urlKey || product?.sku || 'product-image';
+  return encodeURIComponent(rawAlias);
+}
+
 /**
  * loads and decorates the header, mainly the nav
  * @param {Element} block The header block element
@@ -203,6 +233,8 @@ export default async function decorate(block) {
   };
 
   if (navSections) {
+    localizeNavLinks(navSections);
+
     const navList = navSections.querySelector('.default-content-wrapper > ul');
     if (navList) {
       const hasAccount = [...navList.querySelectorAll(':scope > li')].some(
@@ -422,8 +454,13 @@ export default async function decorate(block) {
               const anchorWrapper = document.createElement('a');
               anchorWrapper.href = getProductLink(product.urlKey, product.sku);
 
+              if (!defaultImageProps?.src) {
+                ctx.replaceWith(anchorWrapper);
+                return;
+              }
+
               tryRenderAemAssetsImage(ctx, {
-                alias: product.sku,
+                alias: getSafeAemAlias(product),
                 imageProps: defaultImageProps,
                 wrapper: anchorWrapper,
                 params: {
