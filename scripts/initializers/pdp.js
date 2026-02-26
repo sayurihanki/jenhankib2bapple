@@ -18,6 +18,57 @@ export const IMAGES_SIZES = {
   height: 1191,
 };
 
+const URLKEY_TO_SKU_QUERY = `
+  query resolveSkuByUrlKey($phrase: String!, $pageSize: Int = 20) {
+    productSearch(phrase: $phrase, page_size: $pageSize) {
+      items {
+        productView {
+          sku
+          urlKey
+        }
+      }
+    }
+  }
+`;
+
+function getUrlKeyFromPath(pathname = window.location.pathname) {
+  const result = pathname.match(/\/products\/([\w|-]+)(?:\/[\w|-]+)?$/);
+  return result?.[1] || null;
+}
+
+async function resolveSkuByUrlKey(urlKey) {
+  if (!urlKey) {
+    return null;
+  }
+
+  try {
+    const { data, errors } = await CS_FETCH_GRAPHQL.fetchGraphQl(URLKEY_TO_SKU_QUERY, {
+      method: 'GET',
+      variables: {
+        phrase: urlKey,
+        pageSize: 20,
+      },
+    });
+
+    if (errors?.length) {
+      console.warn('Unable to resolve sku from urlKey via productSearch', { urlKey, errors });
+      return null;
+    }
+
+    const exactMatch = data?.productSearch?.items
+      ?.find((item) => item?.productView?.urlKey === urlKey)?.productView;
+
+    if (!exactMatch?.sku) {
+      return null;
+    }
+
+    return exactMatch.sku;
+  } catch (error) {
+    console.warn('Error while resolving sku from urlKey', { urlKey, error });
+    return null;
+  }
+}
+
 /**
  * Extracts the main product image URL from JSON-LD or meta tags
  * @returns {string|null} The image URL or null if not found
@@ -79,19 +130,28 @@ await initializeDropin(async () => {
   preloadPDPAssets();
 
   // Fetch product data
-  const sku = getProductSku();
+  let sku = getProductSku();
   const optionsUIDs = getOptionsUIDsFromUrl();
+  const urlKey = getUrlKeyFromPath();
 
-  const getProductData = async (skipTransform) => {
-    const data = await fetchProductData(sku, { optionsUIDs, skipTransform })
+  const getProductData = async (targetSku, skipTransform) => {
+    const data = await fetchProductData(targetSku, { optionsUIDs, skipTransform })
       .then(preloadImageMiddleware);
     return data;
   };
 
-  const [product, labels] = await Promise.all([
-    getProductData(true),
-    fetchPlaceholders('placeholders/pdp.json'),
-  ]);
+  const labelsPromise = fetchPlaceholders('placeholders/pdp.json');
+  let product = await getProductData(sku, true);
+
+  if (!product?.sku && urlKey) {
+    const resolvedSku = await resolveSkuByUrlKey(urlKey);
+    if (resolvedSku) {
+      sku = resolvedSku;
+      product = await getProductData(sku, true);
+    }
+  }
+
+  const labels = await labelsPromise;
 
   if (!product?.sku) {
     return loadErrorPage();
