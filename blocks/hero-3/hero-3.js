@@ -272,29 +272,111 @@ function extractImage(cell) {
   return null;
 }
 
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function lerp(start, end, amount) {
+  return start + (end - start) * amount;
+}
+
 function initParallax(section, bgLayer, mediaLayer, decorLayer) {
   const prefersReduced = window.matchMedia(
     '(prefers-reduced-motion: reduce)',
   ).matches;
-  if (prefersReduced) return;
+  const compactViewport = window.matchMedia('(max-width: 900px)').matches;
+  const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+  if (prefersReduced || compactViewport || coarsePointer) return;
 
-  const speeds = { bg: 0.12, media: 0.32, decor: 0.52 };
-  let raf = null;
+  const range = { bg: 28, media: 56, decor: 92 };
+  const current = { bg: 0, media: 0, decor: 0 };
+  const target = { bg: 0, media: 0, decor: 0 };
+  const easing = 0.14;
+  const settleThreshold = 0.08;
 
-  function apply() {
-    const rect = section.getBoundingClientRect();
-    const progress = -rect.top;
-    if (bgLayer) bgLayer.style.transform = `translateY(${progress * speeds.bg}px)`;
-    if (mediaLayer) mediaLayer.style.transform = `translateY(${progress * speeds.media}px)`;
-    if (decorLayer) decorLayer.style.transform = `translateY(${progress * speeds.decor}px)`;
-    raf = null;
+  let viewportHeight = window.innerHeight;
+  let rafId = null;
+  let inView = true;
+
+  function setLayerOffset(layer, value) {
+    if (!layer) return;
+    layer.style.setProperty('--hero-3-parallax-y', `${value.toFixed(2)}px`);
   }
 
-  window.addEventListener('scroll', () => {
-    if (!raf) raf = requestAnimationFrame(apply);
-  }, { passive: true });
+  function updateTarget() {
+    const rect = section.getBoundingClientRect();
+    const sectionCenter = rect.top + (rect.height / 2);
+    const viewportCenter = viewportHeight / 2;
+    const normalized = clamp(
+      (viewportCenter - sectionCenter) / ((viewportHeight + rect.height) / 2),
+      -1,
+      1,
+    );
 
-  apply();
+    target.bg = normalized * range.bg;
+    target.media = normalized * range.media;
+    target.decor = normalized * range.decor;
+  }
+
+  function render() {
+    rafId = null;
+
+    current.bg = lerp(current.bg, target.bg, easing);
+    current.media = lerp(current.media, target.media, easing);
+    current.decor = lerp(current.decor, target.decor, easing);
+
+    setLayerOffset(bgLayer, current.bg);
+    setLayerOffset(mediaLayer, current.media);
+    setLayerOffset(decorLayer, current.decor);
+
+    const delta = Math.max(
+      Math.abs(target.bg - current.bg),
+      Math.abs(target.media - current.media),
+      Math.abs(target.decor - current.decor),
+    );
+
+    if (delta > settleThreshold && inView) {
+      rafId = window.requestAnimationFrame(render);
+    }
+  }
+
+  function queueRender() {
+    if (!rafId) {
+      rafId = window.requestAnimationFrame(render);
+    }
+  }
+
+  function handleScroll() {
+    if (!inView) return;
+    updateTarget();
+    queueRender();
+  }
+
+  function handleResize() {
+    viewportHeight = window.innerHeight;
+    updateTarget();
+    queueRender();
+  }
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  window.addEventListener('resize', handleResize, { passive: true });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        inView = entries.some((entry) => entry.isIntersecting);
+        if (inView) {
+          updateTarget();
+          queueRender();
+        }
+      },
+      { rootMargin: '25% 0px 25% 0px' },
+    );
+    observer.observe(section);
+  }
+
+  updateTarget();
+  queueRender();
 }
 
 /**
@@ -368,6 +450,8 @@ export default function decorate(block) {
 
   const mediaCol = document.createElement('div');
   mediaCol.className = 'hero-3-media-col';
+  const mediaParallax = document.createElement('div');
+  mediaParallax.className = 'hero-3-media-parallax';
 
   if (mainImage) {
     const mediaMain = document.createElement('div');
@@ -391,7 +475,7 @@ export default function decorate(block) {
     rotatedLabel.textContent = eyebrowText.split('\u00B7')[0]?.trim() || 'Featured';
     mediaMain.append(rotatedLabel);
 
-    mediaCol.append(mediaMain);
+    mediaParallax.append(mediaMain);
   }
 
   const decorLayer = document.createElement('div');
@@ -405,6 +489,7 @@ export default function decorate(block) {
     decorLayer.append(buildAccentCard(accent2Image.src, accent2Image.alt, accent2Label));
   }
 
+  mediaCol.append(mediaParallax);
   mediaCol.append(decorLayer);
 
   const colorSlab = document.createElement('div');
@@ -424,7 +509,7 @@ export default function decorate(block) {
   initParallax(
     block,
     bgLayer,
-    block.querySelector('.hero-3-media-main'),
+    mediaParallax,
     decorLayer,
   );
 }
