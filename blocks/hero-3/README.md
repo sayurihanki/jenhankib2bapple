@@ -36,28 +36,38 @@ Content is authored as up to 9 rows (all optional except row 1):
 
 ### Parallax System
 
-Three layers move at different scroll speeds:
-- **Background layer** (0.12x) — Ambient depth
-- **Media layer** (0.32x) — Main image
-- **Decor layer** (0.52x) — Floating accent cards
+Parallax is driven by a normalized section-to-viewport center distance, then clamped and eased in `requestAnimationFrame`.
+
+- **Background layer** (`.hero-3-bg-layer`) uses `--hero-3-parallax-y` with max range ~28px
+- **Media layer** (`.hero-3-media-parallax`) uses `--hero-3-parallax-y` with max range ~56px
+- **Decor layer** (`.hero-3-decor-layer`) uses `--hero-3-parallax-y` with max range ~92px
+- Rendering uses lerp easing (`0.14`) with settle threshold (`0.08`) to avoid jumpy movement
+- `IntersectionObserver` limits animation work when the block is out of view
+
+Parallax is disabled when any of the following are true:
+- `prefers-reduced-motion: reduce`
+- coarse pointer input (`(pointer: coarse)`)
+- compact viewport (`(max-width: 900px)`)
 
 ### Entrance Animations
 
-- All `.hero-3-stagger` elements fade in and slide up with sequential delays
-- Main image scales from 97% with a 1-second transition
-- Accent cards rotate in from offset positions with staggered delays (700ms, 880ms)
-- Animations are triggered by adding the `hero-3-entered` class after a 60ms `requestAnimationFrame` delay
+- `.hero-3-stagger` elements fade in and slide up using `translate3d(...)` for smoother composition
+- Main image enters with translate + scale, then image scale settles from `1.035` to `1`
+- Accent cards enter first, then floating keyframes begin after entrance delays
+- `hero-3-entered` is applied after a short `requestAnimationFrame` + timeout trigger
+- Card float starts after entrance (`1.05s` and `1.3s`) so transforms do not conflict
 
 ### Visual Details
 
 - **Urgency chip**: Pill-shaped with pulsing dot animation and accent border
 - **Headline**: Gradient text fill (accent-1 to accent-2 to neutral-900)
 - **CTAs**: Primary uses gradient background with arrow animation; secondary uses glassmorphic border style
-- **Accent cards**: Floating glassmorphic cards with gentle bobbing animations (5s/6s cycles)
-- **Color slab**: Blurred gradient shape behind the media column for ambient color
+- **Accent cards**: Floating glassmorphic cards with delayed bobbing animations (8s/9s cycles)
+- **Background depth**: Additional soft glow blobs and refined section shadows
+- **Color slab**: Larger blurred gradient slab for ambient media-side depth
 
 ### Error Handling
 
 - Missing rows: Each element is conditionally rendered only if its data exists
 - No content rows: Logs a warning and returns early
-- `prefers-reduced-motion`: All entrance animations, floating card animations, and parallax are disabled
+- `prefers-reduced-motion`: Entrance transitions and floating animations are disabled and content is shown statically
